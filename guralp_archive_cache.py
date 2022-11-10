@@ -14,7 +14,9 @@ def move_soh(
     '''
     Move soh files for the specified date from the guralp cache to the archive
     '''
-    soh_cache = f'{cache_dir}/miniseed/{date.year}/*SOH*'
+    soh_pattern = date.strftime("*.SOH.%Y.%j")
+
+    soh_cache = f'{cache_dir}/miniseed/{date.year}/{soh_pattern}'
 
     target_dir = archive_dir.joinpath(date.strftime('soh/%Y/%M/%d'))
 
