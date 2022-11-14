@@ -2,7 +2,9 @@
 import argparse
 from datetime import datetime, timedelta
 from pathlib import Path
-from subprocess import Popen, PIPE
+# from subprocess import Popen, PIPE
+from shutil import copy
+from os import remove
 # TODO: Update and test
 
 
@@ -18,7 +20,7 @@ def move_soh(
 
     soh_files = cache_dir.glob(soh_pattern)
 
-    # soh_cache = f'{cache_dir}/miniseed/{date.year}/{soh_pattern}' 
+    # soh_cache = f'{cache_dir}/miniseed/{date.year}/{soh_pattern}'
 
     target_dir = archive_dir.joinpath(date.strftime('soh/%Y/%m/%d'))
 
@@ -26,8 +28,10 @@ def move_soh(
         target_dir.mkdir(mode=0o755, parents=True, exist_ok=True)
 
     for file in soh_files:
-        filename = file.name
-        file.rename(target_dir.joinpath(filename))
+        # filename = file.name
+        # file.rename(target_dir.joinpath(filename))
+        copy(file, target_dir)
+        remove(file)
 
     # rsync_cmd = f'rsync -a {soh_cache} {target_dir}'
 
@@ -55,8 +59,10 @@ def move_miniseed(
         target_dir.mkdir(mode=0o755, parents=True, exist_ok=True)
 
     for file in miniseed_files:
-        filename = file.name
-        file.rename(target_dir.joinpath(filename))
+        # filename = file.name
+        # file.rename(target_dir.joinpath(filename))
+        copy(file, target_dir)
+        remove(file)
 
     # rsync_cmd = f'rsync -a {miniseed_cache} {target_dir}'
 
@@ -86,8 +92,10 @@ def move_latency(
         target_dir.mkdir(mode=0o755, parents=True, exist_ok=True)
 
     for file in latency_files:
-        filename = file.name
-        file.rename(target_dir.joinpath(filename))
+        # filename = file.name
+        # file.rename(target_dir.joinpath(filename))
+        copy(file, target_dir)
+        remove(file)
 
     # rsync_cmd = f'rsync -a {latency_cache} {target_dir}'
 
