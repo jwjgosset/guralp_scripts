@@ -50,8 +50,8 @@ def move_miniseed(
     Move miniseed files for the specified date from the guralp cache to the
     archive
     '''
-    miniseed_files = list(cache_dir.glob((f'{cache_dir}/miniseed/{date.year}/*.*.*.*.' +
-                                     date.strftime("%Y.%j"))))
+    miniseed_files = list(cache_dir.glob((f'miniseed/{date.year}/*.*.*.*.' +
+                                          date.strftime("%Y.%j"))))
 
     target_dir = archive_dir.joinpath(date.strftime('miniseed/%Y/%m/%d'))
 
@@ -81,8 +81,8 @@ def move_latency(
     Move latency csv files for the specified date from guralp cache to the
     archive
     '''
-    latency_files = list(cache_dir.glob(f'{cache_dir}/latency/*_*_*_*_' +
-                                   date.strftime("%Y_%j") + '.csv'))
+    latency_files = list(cache_dir.glob('latency/*_*_*_*_' +
+                                        date.strftime("%Y_%j") + '.csv'))
     # latency_cache = (f'{cache_dir}/latency/*_*_*_*_' +
     #                 date.strftime("%Y_%j") + '.csv')
 
