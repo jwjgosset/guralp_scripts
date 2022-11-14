@@ -18,7 +18,7 @@ def move_soh(
 
     soh_cache = f'{cache_dir}/miniseed/{date.year}/{soh_pattern}'
 
-    target_dir = archive_dir.joinpath(date.strftime('soh/%Y/%M/%d'))
+    target_dir = archive_dir.joinpath(date.strftime('soh/%Y/%m/%d'))
 
     if not target_dir.exists():
         target_dir.mkdir(mode=0o755, parents=True, exist_ok=True)
@@ -40,7 +40,7 @@ def move_miniseed(
     miniseed_cache = (f'{cache_dir}/miniseed/{date.year}/*.*.*.*.' +
                       date.strftime("%Y.%j"))
 
-    target_dir = archive_dir.joinpath(date.strftime('miniseed/%Y/%M/%d'))
+    target_dir = archive_dir.joinpath(date.strftime('miniseed/%Y/%m/%d'))
 
     if not target_dir.exists():
         target_dir.mkdir(mode=0o755, parents=True, exist_ok=True)
@@ -62,7 +62,7 @@ def move_latency(
     latency_cache = (f'{cache_dir}/latency/{date.year}/*.*.*.*.' +
                      date.strftime("%Y.%j") + '.csv')
 
-    target_dir = archive_dir.joinpath(date.strftime('latency/%Y/%M/%d'))
+    target_dir = archive_dir.joinpath(date.strftime('latency/%Y/%m/%d'))
 
     if not target_dir.exists():
         target_dir.mkdir(mode=0o755, parents=True, exist_ok=True)
