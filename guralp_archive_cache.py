@@ -98,20 +98,20 @@ def main():
 
     # Move files
     move_soh(
-        cache_dir=cache_dir,
-        archive_dir=archive_dir,
+        cache_dir=Path(cache_dir),
+        archive_dir=Path(archive_dir),
         date=yesterday
     )
 
     move_miniseed(
-        cache_dir=cache_dir,
-        archive_dir=archive_dir,
+        cache_dir=Path(cache_dir),
+        archive_dir=Path(archive_dir),
         date=yesterday
     )
 
     move_latency(
-        cache_dir=cache_dir,
-        archive_dir=archive_dir,
+        cache_dir=Path(cache_dir),
+        archive_dir=Path(archive_dir),
         date=yesterday
     )
 
