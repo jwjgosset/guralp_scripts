@@ -2,7 +2,7 @@
 import argparse
 from datetime import datetime, timedelta
 from pathlib import Path
-import subprocess
+from subprocess import Popen, PIPE, STDOUT
 # TODO: Update and test
 
 
@@ -23,9 +23,12 @@ def move_soh(
     if not target_dir.exists():
         target_dir.mkdir(mode=0o755, parents=True, exist_ok=True)
 
-    rsync_cmd = f'rsync --remove-source-files -a {soh_cache} {target_dir}'
+    rsync_cmd = f'rsync -a {soh_cache} {target_dir}'
 
-    subprocess.Popen(rsync_cmd, shell=True)
+    proc = Popen(rsync_cmd, stdin=PIPE, stdout=PIPE)
+    stdout, stderr = proc.communicate()
+    print(stdout)
+    print(stderr)
 
 
 def move_miniseed(
@@ -45,9 +48,12 @@ def move_miniseed(
     if not target_dir.exists():
         target_dir.mkdir(mode=0o755, parents=True, exist_ok=True)
 
-    rsync_cmd = f'rsync --remove-source-files -a {miniseed_cache} {target_dir}'
+    rsync_cmd = f'rsync -a {miniseed_cache} {target_dir}'
 
-    subprocess.Popen(rsync_cmd, shell=True)
+    proc = Popen(rsync_cmd, stdin=PIPE, stdout=PIPE)
+    stdout, stderr = proc.communicate()
+    print(stdout)
+    print(stderr)
 
 
 def move_latency(
@@ -59,7 +65,7 @@ def move_latency(
     Move latency csv files for the specified date from guralp cache to the
     archive
     '''
-    latency_cache = (f'{cache_dir}/latency/{date.year}/*_*_*_*_' +
+    latency_cache = (f'{cache_dir}/latency/*_*_*_*_' +
                      date.strftime("%Y_%j") + '.csv')
 
     target_dir = archive_dir.joinpath(date.strftime('latency/%Y/%m/%d'))
@@ -67,9 +73,12 @@ def move_latency(
     if not target_dir.exists():
         target_dir.mkdir(mode=0o755, parents=True, exist_ok=True)
 
-    rsync_cmd = f'rsync --remove-source-files -a {latency_cache} {target_dir}'
+    rsync_cmd = f'rsync -a {latency_cache} {target_dir}'
 
-    subprocess.Popen(rsync_cmd, shell=True)
+    proc = Popen(rsync_cmd, stdin=PIPE, stdout=PIPE)
+    stdout, stderr = proc.communicate()
+    print(stdout)
+    print(stderr)
 
 
 def main():
