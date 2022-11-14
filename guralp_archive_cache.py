@@ -2,7 +2,7 @@
 import argparse
 from datetime import datetime, timedelta
 from pathlib import Path
-from subprocess import Popen, PIPE, STDOUT
+from subprocess import Popen, PIPE
 # TODO: Update and test
 
 
@@ -14,21 +14,27 @@ def move_soh(
     '''
     Move soh files for the specified date from the guralp cache to the archive
     '''
-    soh_pattern = date.strftime("*.SOH.%Y.%j")
+    soh_pattern = date.strftime("miniseed/%Y/*.SOH.%Y.%j")
 
-    soh_cache = f'{cache_dir}/miniseed/{date.year}/{soh_pattern}'
+    soh_files = cache_dir.glob(soh_pattern)
+
+    # soh_cache = f'{cache_dir}/miniseed/{date.year}/{soh_pattern}' 
 
     target_dir = archive_dir.joinpath(date.strftime('soh/%Y/%m/%d'))
 
     if not target_dir.exists():
         target_dir.mkdir(mode=0o755, parents=True, exist_ok=True)
 
-    rsync_cmd = f'rsync -a {soh_cache} {target_dir}'
+    for file in soh_files:
+        filename = file.name
+        file.rename(target_dir.joinpath(filename))
 
-    proc = Popen(rsync_cmd, stdin=PIPE, stdout=PIPE)
-    stdout, stderr = proc.communicate()
-    print(stdout)
-    print(stderr)
+    # rsync_cmd = f'rsync -a {soh_cache} {target_dir}'
+
+    # proc = Popen(rsync_cmd, stdin=PIPE, stdout=PIPE)
+    # stdout, stderr = proc.communicate()
+    # print(stdout)
+    # print(stderr)
 
 
 def move_miniseed(
@@ -40,20 +46,24 @@ def move_miniseed(
     Move miniseed files for the specified date from the guralp cache to the
     archive
     '''
-    miniseed_cache = (f'{cache_dir}/miniseed/{date.year}/*.*.*.*.' +
-                      date.strftime("%Y.%j"))
+    miniseed_files = cache_dir.glob((f'{cache_dir}/miniseed/{date.year}/*.*.*.*.' +
+                                     date.strftime("%Y.%j")))
 
     target_dir = archive_dir.joinpath(date.strftime('miniseed/%Y/%m/%d'))
 
     if not target_dir.exists():
         target_dir.mkdir(mode=0o755, parents=True, exist_ok=True)
 
-    rsync_cmd = f'rsync -a {miniseed_cache} {target_dir}'
+    for file in miniseed_files:
+        filename = file.name
+        file.rename(target_dir.joinpath(filename))
 
-    proc = Popen(rsync_cmd, stdin=PIPE, stdout=PIPE)
-    stdout, stderr = proc.communicate()
-    print(stdout)
-    print(stderr)
+    # rsync_cmd = f'rsync -a {miniseed_cache} {target_dir}'
+
+    # proc = Popen(rsync_cmd, stdin=PIPE, stdout=PIPE)
+    # stdout, stderr = proc.communicate()
+    # print(stdout)
+    # print(stderr)
 
 
 def move_latency(
@@ -65,20 +75,26 @@ def move_latency(
     Move latency csv files for the specified date from guralp cache to the
     archive
     '''
-    latency_cache = (f'{cache_dir}/latency/*_*_*_*_' +
-                     date.strftime("%Y_%j") + '.csv')
+    latency_files = cache_dir.glob(f'{cache_dir}/latency/*_*_*_*_' +
+                                   date.strftime("%Y_%j") + '.csv')
+    # latency_cache = (f'{cache_dir}/latency/*_*_*_*_' +
+    #                 date.strftime("%Y_%j") + '.csv')
 
     target_dir = archive_dir.joinpath(date.strftime('latency/%Y/%m/%d'))
 
     if not target_dir.exists():
         target_dir.mkdir(mode=0o755, parents=True, exist_ok=True)
 
-    rsync_cmd = f'rsync -a {latency_cache} {target_dir}'
+    for file in latency_files:
+        filename = file.name
+        file.rename(target_dir.joinpath(filename))
 
-    proc = Popen(rsync_cmd, stdin=PIPE, stdout=PIPE)
-    stdout, stderr = proc.communicate()
-    print(stdout)
-    print(stderr)
+    # rsync_cmd = f'rsync -a {latency_cache} {target_dir}'
+
+    # proc = Popen(rsync_cmd, stdin=PIPE, stdout=PIPE)
+    # stdout, stderr = proc.communicate()
+    # print(stdout)
+    # print(stderr)
 
 
 def main():
