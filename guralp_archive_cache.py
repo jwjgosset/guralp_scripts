@@ -86,11 +86,20 @@ def main():
         help='Archive directory',
         default='/data/archive'
     )
+    argsparser.add_argument(
+        '-d',
+        '--date',
+        help='Date',
+        default=None
+    )
 
     args = argsparser.parse_args()
 
     # Get yesterday's date
-    yesterday = datetime.now() - timedelta(days=1)
+    if args.date is None:
+        date = datetime.now() - timedelta(days=1)
+    else:
+        date = datetime.strptime(args.date, '%Y-%m-%d')
 
     cache_dir = Path(args.cache_dir)
 
@@ -98,21 +107,21 @@ def main():
 
     # Move files
     move_soh(
-        cache_dir=cache_dir,
-        archive_dir=archive_dir,
-        date=yesterday
+        cache_dir=Path(cache_dir),
+        archive_dir=Path(archive_dir),
+        date=date
     )
 
     move_miniseed(
-        cache_dir=cache_dir,
-        archive_dir=archive_dir,
-        date=yesterday
+        cache_dir=Path(cache_dir),
+        archive_dir=Path(archive_dir),
+        date=date
     )
 
     move_latency(
-        cache_dir=cache_dir,
-        archive_dir=archive_dir,
-        date=yesterday
+        cache_dir=Path(cache_dir),
+        archive_dir=Path(archive_dir),
+        date=date
     )
 
     return
