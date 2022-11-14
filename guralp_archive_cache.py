@@ -59,8 +59,8 @@ def move_latency(
     Move latency csv files for the specified date from guralp cache to the
     archive
     '''
-    latency_cache = (f'{cache_dir}/latency/{date.year}/*.*.*.*.' +
-                     date.strftime("%Y.%j") + '.csv')
+    latency_cache = (f'{cache_dir}/latency/{date.year}/*_*_*_*_' +
+                     date.strftime("%Y_%j") + '.csv')
 
     target_dir = archive_dir.joinpath(date.strftime('latency/%Y/%m/%d'))
 
