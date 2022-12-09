@@ -105,7 +105,8 @@ def sync_directory(
     logging.debug(stdout)
 
     # Log errors
-    logging.error(f'Error running rsync: {str(stderr)}')
+    if stderr != b'':
+        logging.error(f'Error running rsync: {str(stderr)}')
 
     return
 
