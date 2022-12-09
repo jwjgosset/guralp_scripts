@@ -33,7 +33,7 @@ def sync_archives(
     user: str
         The user to connect to the remote server as
     '''
-    
+
     # If a user is specify, make a string that can be attached to the front of
     # the hostname in user@hostname format
     if user is not None:
