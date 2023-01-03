@@ -59,17 +59,9 @@ def move_miniseed(
         target_dir.mkdir(mode=0o755, parents=True, exist_ok=True)
 
     for file in miniseed_files:
-        # filename = file.name
-        # file.rename(target_dir.joinpath(filename))
+
         copy(file, target_dir)
         remove(file)
-
-    # rsync_cmd = f'rsync -a {miniseed_cache} {target_dir}'
-
-    # proc = Popen(rsync_cmd, stdin=PIPE, stdout=PIPE)
-    # stdout, stderr = proc.communicate()
-    # print(stdout)
-    # print(stderr)
 
 
 def move_latency(
@@ -82,9 +74,7 @@ def move_latency(
     archive
     '''
     latency_files = list(cache_dir.glob('latency/*_*_*_*_' +
-                                        date.strftime("%Y_%j") + '.csv'))
-    # latency_cache = (f'{cache_dir}/latency/*_*_*_*_' +
-    #                 date.strftime("%Y_%j") + '.csv')
+                                        date.strftime("%Y_%-j") + '.csv'))
 
     target_dir = archive_dir.joinpath(date.strftime('latency/%Y/%m/%d'))
 
@@ -92,17 +82,8 @@ def move_latency(
         target_dir.mkdir(mode=0o755, parents=True, exist_ok=True)
 
     for file in latency_files:
-        # filename = file.name
-        # file.rename(target_dir.joinpath(filename))
         copy(file, target_dir)
         remove(file)
-
-    # rsync_cmd = f'rsync -a {latency_cache} {target_dir}'
-
-    # proc = Popen(rsync_cmd, stdin=PIPE, stdout=PIPE)
-    # stdout, stderr = proc.communicate()
-    # print(stdout)
-    # print(stderr)
 
 
 def main():
