@@ -42,10 +42,10 @@ def move_rename_miniseed(
 def main():
     argsparser = argparse.ArgumentParser()
     argsparser.add_argument(
-        '-a',
-        '--archive-dir',
-        help='Archive directory',
-        default='/data/archive'
+        '-c',
+        '--cache-dir',
+        help='Cache directory',
+        default='/var/cache/guralp'
     )
     argsparser.add_argument(
         '-d',
