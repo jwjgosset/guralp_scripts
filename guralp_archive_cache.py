@@ -113,9 +113,9 @@ def main(
     archive_dir: str,
     working_date: str
 ):
-    # Get yesterday's date
+    # the date for two days ago. This is used as the default to allow for backfilling
     if working_date is None:
-        working_date = datetime.now() - timedelta(days=1)
+        working_date = datetime.now() - timedelta(days=2)
     else:
         working_date = datetime.strptime(working_date, '%Y-%m-%d')
 
