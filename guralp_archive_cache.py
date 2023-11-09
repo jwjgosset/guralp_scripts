@@ -3,6 +3,7 @@ from pathlib import Path
 import click
 from shutil import copy
 from os import remove
+import logging
 
 
 def move_soh(
@@ -15,15 +16,18 @@ def move_soh(
     '''
 
     # Locate all SOH files for the specified date
-    soh_pattern = date.strftime("%Y/*.SOH.%Y.%j")
+    soh_pattern = date.strftime("*.SOH.%Y.%j")
 
     soh_files = list(cache_dir.glob(soh_pattern))
+
+    logging.debug(f"SOH Files found: {soh_files}")
 
     target_dir = archive_dir.joinpath(date.strftime('soh/%Y/%m/%d'))
 
     # Ensure a folder for the specified date exists in the archive
     if not target_dir.exists():
         target_dir.mkdir(mode=0o755, parents=True, exist_ok=True)
+        logging.debug(f"Directory created: {target_dir}")
 
     # Move the files from the cache directory to the archive
     for file in soh_files:
@@ -42,14 +46,17 @@ def move_miniseed(
     '''
 
     # Get a list of all miniseed files for the specified date
-    miniseed_files = list(cache_dir.glob((f'{date.year}/*.*.*.*.' +
+    miniseed_files = list(cache_dir.glob((f'*.*.*.*.' +
                                           date.strftime("%Y.%j"))))
+
+    logging.debug(f"Miniseed files found: {miniseed_files}")
 
     target_dir = archive_dir.joinpath(date.strftime('miniseed/%Y/%m/%d'))
 
     # Ensure that a directory exists in the archive for the specified date
     if not target_dir.exists():
         target_dir.mkdir(mode=0o755, parents=True, exist_ok=True)
+        logging.debug(f"Directory created: {target_dir}")
 
     # Move the files from the cache to the archive
     for file in miniseed_files:
@@ -70,11 +77,14 @@ def move_latency(
     latency_files = list(cache_dir.glob('latency/*_*_*_*_' +
                                         date.strftime("%Y_%-j") + '.csv'))
 
+    logging.debug(f"Latency files found: {latency_files}")
+
     target_dir = archive_dir.joinpath(date.strftime('latency/%Y/%m/%d'))
 
     # Ensure a directory for the specified date exists in the archive
     if not target_dir.exists():
         target_dir.mkdir(mode=0o755, parents=True, exist_ok=True)
+        logging.debug(f"Directory created: {target_dir}")
 
     # Copy the files from the cache to the archive
     for file in latency_files:
@@ -107,35 +117,52 @@ def move_latency(
     help='Date',
     default=None
 )
+@click.option(
+    '-v',
+    '--verbose',
+    is_flag=True,
+    default=False,
+    help='Sets logging level to DEBUG.'
+)
 def main(
     miniseed_dir: str,
     latency_dir: str,
     archive_dir: str,
-    working_date: str
+    working_date: str,
+    verbose: bool
 ):
+    
+    logging.basicConfig(
+        format='%(asctime)s:%(levelname)s:%(message)s',
+        datefmt="%Y-%m-%d %H:%M:%S",
+        level=logging.DEBUG if verbose else logging.INFO)
+
     # the date for two days ago. This is used as the default to allow for backfilling
     if working_date is None:
-        working_date = datetime.now() - timedelta(days=2)
+        working_datetime = datetime.now() - timedelta(days=2)
     else:
-        working_date = datetime.strptime(working_date, '%Y-%m-%d')
+        working_datetime = datetime.strptime(working_date, '%Y-%m-%d')
+
+    logging.debug(f"Working date: {working_datetime}")
+    logging.debug(f"Julian day: {working_datetime.strftime('%j')}")
 
     # Move files
     move_soh(
         cache_dir=Path(miniseed_dir),
         archive_dir=Path(archive_dir),
-        date=working_date
+        date=working_datetime
     )
 
     move_miniseed(
         cache_dir=Path(miniseed_dir),
         archive_dir=Path(archive_dir),
-        date=working_date
+        date=working_datetime
     )
 
     move_latency(
         cache_dir=Path(latency_dir),
         archive_dir=Path(archive_dir),
-        date=working_date
+        date=working_datetime
     )
 
     return
