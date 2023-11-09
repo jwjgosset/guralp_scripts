@@ -46,8 +46,8 @@ def move_miniseed(
     '''
 
     # Get a list of all miniseed files for the specified date
-    miniseed_files = list(cache_dir.glob((f'*.*.*.*.' +
-                                          date.strftime("%Y.%j"))))
+    miniseed_files = list(cache_dir.glob('*.*.*.*.' +
+                                          date.strftime("%Y.%j")))
 
     logging.debug(f"Miniseed files found: {miniseed_files}")
 
@@ -74,7 +74,7 @@ def move_latency(
     archive
     '''
     # Get a list of the latency files for the specified date
-    latency_files = list(cache_dir.glob('latency/*_*_*_*_' +
+    latency_files = list(cache_dir.glob('*_*_*_*_' +
                                         date.strftime("%Y_%-j") + '.csv'))
 
     logging.debug(f"Latency files found: {latency_files}")
