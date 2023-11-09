@@ -103,7 +103,7 @@ def move_latency(
 )
 @click.option(
     '-d',
-    '--date',
+    '--working-date',
     help='Date',
     default=None
 )
